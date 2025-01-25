@@ -1,3 +1,3 @@
-# banck_accounts_cards
+# bank_accounts_cards
 
 A new Flutter project.
