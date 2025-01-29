@@ -22,60 +22,55 @@ class AccountMoveForm extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Crear nuevo movimiento contable'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+      body: body(context),
+    );
+  }
+
+  Widget body(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 750,
+        height: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
                   controller: controller.cuentaController,
                   decoration: const InputDecoration(labelText: 'Cuenta'),
                   keyboardType: TextInputType.text,
                   onChanged: (value) => controller.cuenta.value = value,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Obx(() => ListTile(
+                const SizedBox(
+                  height: 10,
+                ),
+                Obx(() => ListTile(
                       title: Text(
                           "Fecha: ${DateFormat('yyyy-MM-dd').format(controller.selectedFecha.value)}"),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => controller.pickFecha(context),
                     )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Obx(() => ListTile(
+                Obx(() => ListTile(
                       title: Text(
                           "Fecha Compra: ${DateFormat('yyyy-MM-dd').format(controller.selectedFechaCompra.value)}"),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => controller.pickFechaCompra(context),
                     )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration:
                       const InputDecoration(labelText: 'Mes/Año (MM/YYYY)'),
                   keyboardType: TextInputType.text,
                   onChanged: (value) => controller.mesAno.value = value,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration:
                       const InputDecoration(labelText: 'Cliente/Proveedor'),
                   keyboardType: TextInputType.text,
                   onChanged: (value) =>
                       controller.clienteProveedor.value = value,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration:
                       const InputDecoration(labelText: 'Número Factura'),
                   inputFormatters: <TextInputFormatter>[
@@ -84,10 +79,7 @@ class AccountMoveForm extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   onChanged: (value) => controller.numeroFactura.value = value,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration: const InputDecoration(labelText: 'Número CI'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
@@ -95,27 +87,18 @@ class AccountMoveForm extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   onChanged: (value) => controller.numeroCI.value = value,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
+                TextFormField(
                   decoration: const InputDecoration(labelText: 'Descripción'),
                   maxLines: 5,
                   onChanged: (value) => controller.descripcion.value = value,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Obx(() => ListTile(
+                Obx(() => ListTile(
                       title: Text(
                           "Fecha Pago: ${DateFormat('yyyy-MM-dd').format(controller.selectedFechaPago.value)}"),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => controller.pickFechaPago(context),
                     )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration: const InputDecoration(labelText: 'Ingreso'),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
@@ -124,10 +107,7 @@ class AccountMoveForm extends StatelessWidget {
                   onChanged: (value) =>
                       controller.ingreso.value = double.tryParse(value) ?? 0.0,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration: const InputDecoration(labelText: 'Egreso'),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
@@ -136,10 +116,7 @@ class AccountMoveForm extends StatelessWidget {
                   onChanged: (value) =>
                       controller.egreso.value = double.tryParse(value) ?? 0.0,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration: const InputDecoration(labelText: 'Saldo'),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
@@ -148,10 +125,7 @@ class AccountMoveForm extends StatelessWidget {
                   onChanged: (value) =>
                       controller.saldo.value = double.tryParse(value) ?? 0.0,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration: const InputDecoration(labelText: 'Total'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
@@ -160,10 +134,7 @@ class AccountMoveForm extends StatelessWidget {
                   onChanged: (value) =>
                       controller.total.value = double.tryParse(value) ?? 0.0,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                TextField(
                   decoration: const InputDecoration(labelText: 'Retención'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
@@ -172,25 +143,28 @@ class AccountMoveForm extends StatelessWidget {
                   onChanged: (value) => controller.retencion.value =
                       double.tryParse(value) ?? 0.0,
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      controller.createMovimientoContable();
-                    },
-                    child: const Text('Crear'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          controller.createMovimientoContable();
+                        },
+                        child: const Text('Crear'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('Cancelar'),
+                      ),
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text('Cancelar'),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

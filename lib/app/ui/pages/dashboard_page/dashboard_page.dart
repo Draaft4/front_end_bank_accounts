@@ -13,6 +13,8 @@ class DashboardPage {
   RxDouble balanceJ406 = 0.0.obs;
   RxDouble balanceC092 = 0.0.obs;
 
+  final ScrollController _scrollController = ScrollController();
+
   void fetchData() async {
     isLoading.value = true;
     try {
@@ -86,51 +88,56 @@ class DashboardPage {
   }
 
   Widget body() {
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      children: [
-        SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildCard('Balance total AP221', 'static/bp_logo.png',
-                          balanceAp221.value.toString()),
-                      const SizedBox(width: 20),
-                      _buildCard('Balance total E210', 'static/bp_logo.png',
-                          balanceE210.value.toString()),
-                      const SizedBox(width: 20),
-                      _buildCard('Balance total P348', 'static/bp_logo.png',
-                          balanceP348.value.toString()),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildCard('Balance total CAJA', 'static/caja_logo.png',
-                          balanceC092.value.toString()),
-                      const SizedBox(width: 20),
-                      _buildCard('Balance total JEP', 'static/jep_logo.png',
-                          balanceJ406.value.toString()),
-                      const SizedBox(width: 20),
-                      _buildCard(
-                          'Balance total Diners Club',
-                          'static/diners_logo.png',
-                          balanceDiners.value.toString()),
-                      const SizedBox(width: 20),
-                    ],
-                  ),
-                ],
+    return Scrollbar(
+      controller: _scrollController,
+      thumbVisibility: true,
+      child: ListView(
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+        children: [
+          SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildCard('Balance total AP221', 'static/bp_logo.png',
+                            balanceAp221.value.toString()),
+                        const SizedBox(width: 20),
+                        _buildCard('Balance total E210', 'static/bp_logo.png',
+                            balanceE210.value.toString()),
+                        const SizedBox(width: 20),
+                        _buildCard('Balance total P348', 'static/bp_logo.png',
+                            balanceP348.value.toString()),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildCard('Balance total CAJA', 'static/caja_logo.png',
+                            balanceC092.value.toString()),
+                        const SizedBox(width: 20),
+                        _buildCard('Balance total JEP', 'static/jep_logo.png',
+                            balanceJ406.value.toString()),
+                        const SizedBox(width: 20),
+                        _buildCard(
+                            'Balance total Diners Club',
+                            'static/diners_logo.png',
+                            balanceDiners.value.toString()),
+                        const SizedBox(width: 20),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 

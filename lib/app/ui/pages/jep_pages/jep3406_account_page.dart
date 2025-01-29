@@ -10,6 +10,8 @@ class JEP3406AccountPage {
   RxList<MovimientoContable> movimientos = <MovimientoContable>[].obs;
   RxBool isLoading = false.obs;
 
+  final ScrollController _scrollController = ScrollController();
+
   void fetchData() async {
     isLoading.value = true;
     movimientos.value =
@@ -49,59 +51,63 @@ class JEP3406AccountPage {
   }
 
   Widget body() {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: DataTable(
-            columns: const [
-              DataColumn(label: Text('ID')),
-              DataColumn(label: Text('Fecha')),
-              DataColumn(label: Text('Fecha Compra')),
-              DataColumn(label: Text('Mes/Año')),
-              DataColumn(label: Text('Cuenta')),
-              DataColumn(label: Text('Cliente/Proveedor')),
-              DataColumn(label: Text('Número Factura')),
-              DataColumn(label: Text('Número CI')),
-              DataColumn(label: Text('Descripción')),
-              DataColumn(label: Text('Fecha Pago')),
-              DataColumn(label: Text('Ingreso')),
-              DataColumn(label: Text('Egreso')),
-              DataColumn(label: Text('Saldo')),
-              DataColumn(label: Text('Total')),
-              DataColumn(label: Text('Retención')),
-            ],
-            rows: movimientos.map((movimiento) {
-              return DataRow(cells: [
-                DataCell(
-                    SizedBox(width: 20, child: Text(movimiento.id.toString()))),
-                DataCell(Text(movimiento.fecha != null
-                    ? DateFormat('yyyy-MM-dd').format(movimiento.fecha!)
-                    : '')),
-                DataCell(Text(movimiento.fechaCompra != null
-                    ? DateFormat('yyyy-MM-dd').format(movimiento.fechaCompra!)
-                    : '')),
-                DataCell(Text(movimiento.mesAno ?? '')),
-                DataCell(Text(movimiento.cuenta ?? '')),
-                DataCell(Text(movimiento.clienteProveedor ?? '')),
-                DataCell(Text(movimiento.numeroFactura ?? '')),
-                DataCell(Text(movimiento.numeroCI ?? '')),
-                DataCell(Text(movimiento.descripcion ?? '')),
-                DataCell(Text(movimiento.fechaPago != null
-                    ? DateFormat('yyyy-MM-dd').format(movimiento.fechaPago!)
-                    : '')),
-                DataCell(Text(movimiento.ingreso?.toString() ?? '')),
-                DataCell(Text(movimiento.egreso?.toString() ?? '')),
-                DataCell(Text(movimiento.saldo?.toString() ?? '')),
-                DataCell(Text(movimiento.total?.toString() ?? '')),
-                DataCell(Text(movimiento.retencion?.toString() ?? '')),
-              ]);
-            }).toList(),
-          ),
-        ),
-      ),
-    );
+    return Scrollbar(
+        controller: _scrollController,
+        thumbVisibility: true,
+        child: ListView(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: DataTable(
+                columns: const [
+                  DataColumn(label: Text('ID')),
+                  DataColumn(label: Text('Fecha')),
+                  DataColumn(label: Text('Fecha Compra')),
+                  DataColumn(label: Text('Mes/Año')),
+                  DataColumn(label: Text('Cuenta')),
+                  DataColumn(label: Text('Cliente/Proveedor')),
+                  DataColumn(label: Text('Número Factura')),
+                  DataColumn(label: Text('Número CI')),
+                  DataColumn(label: Text('Descripción')),
+                  DataColumn(label: Text('Fecha Pago')),
+                  DataColumn(label: Text('Ingreso')),
+                  DataColumn(label: Text('Egreso')),
+                  DataColumn(label: Text('Saldo')),
+                  DataColumn(label: Text('Total')),
+                  DataColumn(label: Text('Retención')),
+                ],
+                rows: movimientos.map((movimiento) {
+                  return DataRow(cells: [
+                    DataCell(SizedBox(
+                        width: 20, child: Text(movimiento.id.toString()))),
+                    DataCell(Text(movimiento.fecha != null
+                        ? DateFormat('yyyy-MM-dd').format(movimiento.fecha!)
+                        : '')),
+                    DataCell(Text(movimiento.fechaCompra != null
+                        ? DateFormat('yyyy-MM-dd')
+                            .format(movimiento.fechaCompra!)
+                        : '')),
+                    DataCell(Text(movimiento.mesAno ?? '')),
+                    DataCell(Text(movimiento.cuenta ?? '')),
+                    DataCell(Text(movimiento.clienteProveedor ?? '')),
+                    DataCell(Text(movimiento.numeroFactura ?? '')),
+                    DataCell(Text(movimiento.numeroCI ?? '')),
+                    DataCell(Text(movimiento.descripcion ?? '')),
+                    DataCell(Text(movimiento.fechaPago != null
+                        ? DateFormat('yyyy-MM-dd').format(movimiento.fechaPago!)
+                        : '')),
+                    DataCell(Text(movimiento.ingreso?.toString() ?? '')),
+                    DataCell(Text(movimiento.egreso?.toString() ?? '')),
+                    DataCell(Text(movimiento.saldo?.toString() ?? '')),
+                    DataCell(Text(movimiento.total?.toString() ?? '')),
+                    DataCell(Text(movimiento.retencion?.toString() ?? '')),
+                  ]);
+                }).toList(),
+              ),
+            )
+          ],
+        ));
   }
 }
