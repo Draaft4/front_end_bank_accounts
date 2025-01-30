@@ -24,7 +24,7 @@ class JEPJ406AccountPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coop JEP J406 Account'),
+        title: const Text('Cuenta Cooperativa Jep J406'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

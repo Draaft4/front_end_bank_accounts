@@ -24,7 +24,7 @@ class AP221AccountPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pichincha Account AP221'),
+        title: const Text('Cuenta Banco Pichincha AP221'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

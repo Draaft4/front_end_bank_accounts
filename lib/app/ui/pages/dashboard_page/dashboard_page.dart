@@ -61,7 +61,7 @@ class DashboardPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text('Principal'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

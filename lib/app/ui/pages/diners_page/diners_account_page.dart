@@ -24,7 +24,7 @@ class DinersAccountPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Diners Club Account'),
+        title: const Text('Cuenta Diners Club'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

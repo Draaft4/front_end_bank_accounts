@@ -24,7 +24,7 @@ class P348AccountPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pichincha Account P348'),
+        title: const Text('Cuenta Banco Pichincha P348'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

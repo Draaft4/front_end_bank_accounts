@@ -29,49 +29,49 @@ class HomePageLower {
           Center(child: sideBar()),
           Obx(() {
             switch (navController.selectedPage.value) {
-              case 'Dashboard':
+              case 'Principal':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
                   child: dashboardPage.dasboard(context),
                 );
-              case 'Accounting':
+              case 'Contabilidad':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
                   child: accountingPage.dasboard(context),
                 );
-              case 'Pichincha Account E210':
+              case 'Cuenta Pichincha E210':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
                   child: e210AccountPage.dasboard(context),
                 );
-              case 'Pichincha Account P348':
+              case 'Cuenta Pichincha P348':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
                   child: p348AccountPage.dasboard(context),
                 );
-              case 'Pichincha Account AP221':
+              case 'Cuenta Pichincha AP221':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
                   child: ap221AccountPage.dasboard(context),
                 );
-              case 'Diners Club Account':
+              case 'Cuenta Diners Club':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
                   child: dinersAccountPage.dasboard(context),
                 );
-              case 'JEP Account 3406':
+              case 'Cuenta JEP J406':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
                   child: jep3406AccountPage.dasboard(context),
                 );
-              case 'Coop CAJA Account':
+              case 'Cuenta Coop Caja':
                 return SizedBox(
                   width: screenWidth - 107,
                   height: screenHeight,
@@ -90,15 +90,15 @@ class HomePageLower {
     return SingleChildScrollView(
       child: Column(
         children: [
-          optionsButton("Dashboard", Icons.dashboard, ''),
-          optionsButton("Accounting", Icons.analytics_outlined, ''),
-          optionsButton("Pichincha Account E210", 'static/bp_logo.png', 'E210'),
-          optionsButton("Pichincha Account P348", 'static/bp_logo.png', 'P348'),
+          optionsButton("Principal", Icons.dashboard, ''),
+          optionsButton("Contabilidad", Icons.analytics_outlined, ''),
+          optionsButton("Cuenta Pichincha E210", 'static/bp_logo.png', 'E210'),
+          optionsButton("Cuenta Pichincha P348", 'static/bp_logo.png', 'P348'),
           optionsButton(
-              "Pichincha Account AP221", 'static/bp_logo.png', 'AP221'),
-          optionsButton("Diners Club Account", 'static/diners_logo.png', 'DC'),
-          optionsButton("JEP Account 3406", 'static/jep_logo.png', '3406'),
-          optionsButton("Coop CAJA Account", 'static/caja_logo.png', 'CAJA'),
+              "Cuenta Pichincha AP221", 'static/bp_logo.png', 'AP221'),
+          optionsButton("Cuenta Diners Club", 'static/diners_logo.png', 'DC'),
+          optionsButton("Cuenta JEP J406", 'static/jep_logo.png', '3406'),
+          optionsButton("Cuenta Coop Caja", 'static/caja_logo.png', 'CAJA'),
         ],
       ),
     );

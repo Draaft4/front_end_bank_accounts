@@ -71,26 +71,26 @@ class ExporterController extends GetxController {
 
     // Save the file
     final directory = await getAplicationDocumentsDirectory();
-    if (directory != 'No directory selected') {
+    if (directory != 'No se ha seleccionado un directorio.') {
       String filePath = '$directory/${selectedItem.value!}.xlsx';
       File(filePath)
         ..createSync(recursive: true)
         ..writeAsBytesSync(excel.encode()!);
       Get.back();
-      Get.snackbar('Success', 'Excel file saved at $filePath');
+      Get.snackbar('Success', 'Archivo de Excel guardado en: $filePath');
     } else {
       Get.back();
-      Get.snackbar('Error', 'No directory selected');
+      Get.snackbar('Error', 'No se ha seleccionado un directorio.');
     }
   }
 
   Future<String> getAplicationDocumentsDirectory() async {
-    final file = DirectoryPicker()..title = 'Select a directory';
+    final file = DirectoryPicker()..title = 'Seleccione un directorio';
     final Directory? result = file.getDirectory();
     if (result != null) {
       return result.path;
     } else {
-      return 'No directory selected';
+      return 'No se ha seleccionado un directorio.';
     }
   }
 }

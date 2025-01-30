@@ -24,7 +24,7 @@ class CAJAAccountPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coop CAJA Account'),
+        title: const Text('Cuenta Cooperativa CAJA'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

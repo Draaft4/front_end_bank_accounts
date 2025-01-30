@@ -23,7 +23,7 @@ class AccountingPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Accounting'),
+        title: const Text('Contabilidad'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
