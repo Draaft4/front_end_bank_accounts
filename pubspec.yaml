@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   get: ^4.6.6
   intl: ^0.20.1
+  excel: ^4.0.6
+  filepicker_windows: ^2.1.4
 
 dev_dependencies:
   flutter_test:

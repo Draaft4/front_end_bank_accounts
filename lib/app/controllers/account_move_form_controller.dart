@@ -65,6 +65,24 @@ class AccountMoveFormController extends GetxController {
   }
 
   void createMovimientoContable() {
+    List<String> camposVacios = [];
+
+    if (cuenta.value.isEmpty) camposVacios.add('Cuenta');
+    if (clienteProveedor.value.isEmpty) camposVacios.add('Cliente/Proveedor');
+    if (numeroFactura.value.isEmpty) camposVacios.add('Número de Factura');
+    if (numeroCI.value.isEmpty) camposVacios.add('Número de CI');
+    if (descripcion.value.isEmpty) camposVacios.add('Descripción');
+    if (mesAno.value.isEmpty) camposVacios.add('Mes/Año');
+
+    if (camposVacios.isNotEmpty) {
+      Get.snackbar(
+        'Error',
+        'Los siguientes campos deben tener un valor válido: ${camposVacios.join(", ")}',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
     MovimientoContable movimiento = MovimientoContable(
       fecha: selectedFecha.value,
       fechaCompra: selectedFechaCompra.value,
@@ -83,5 +101,13 @@ class AccountMoveFormController extends GetxController {
     );
     apiService.createAccountMove(movimiento);
     Get.back();
+  }
+
+  var screenWidth = 0.0.obs;
+  var screenHeight = 0.0.obs;
+
+  void updateDimensions(double width, double height) {
+    screenWidth.value = width;
+    screenHeight.value = height;
   }
 }

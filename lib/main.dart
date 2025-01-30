@@ -1,5 +1,6 @@
 import 'package:banck_accounts_cards/app/bindings/splash_binding.dart';
 import 'package:banck_accounts_cards/app/controllers/account_move_form_controller.dart';
+import 'package:banck_accounts_cards/app/controllers/exporter_controller.dart';
 import 'package:banck_accounts_cards/app/data/services/services.dart';
 import 'package:banck_accounts_cards/app/routes/pages.dart';
 import 'package:banck_accounts_cards/app/routes/routes.dart';
@@ -11,6 +12,7 @@ void main() {
   Get.put(ApiServiceAccounting());
   Get.put(ApiServiceOnAccount());
   Get.put(AccountMoveFormController());
+  Get.put(ExporterController());
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: Routes.SPLASH,

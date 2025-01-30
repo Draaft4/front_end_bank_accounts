@@ -1,11 +1,12 @@
 import 'package:banck_accounts_cards/app/data/models/account_move_model.dart';
 import 'package:banck_accounts_cards/app/data/services/services.dart';
 import 'package:banck_accounts_cards/app/ui/forms/account_move_form.dart';
+import 'package:banck_accounts_cards/app/ui/pages/exporter_page/exporter_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class JEP3406AccountPage {
+class JEPJ406AccountPage {
   final ApiServiceOnAccount apiService = Get.find<ApiServiceOnAccount>();
   RxList<MovimientoContable> movimientos = <MovimientoContable>[].obs;
   RxBool isLoading = false.obs;
@@ -36,6 +37,13 @@ class JEP3406AccountPage {
             icon: const Icon(Icons.refresh),
             onPressed: () {
               fetchData();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.save_alt),
+            onPressed: () {
+              Get.to(() => ExporterPage(),
+                  arguments: {'account_origin': 'J406'});
             },
           ),
         ],

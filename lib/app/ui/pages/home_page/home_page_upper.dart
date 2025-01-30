@@ -6,7 +6,7 @@ import 'package:banck_accounts_cards/app/ui/pages/bp_pages/p348_account_page.dar
 import 'package:banck_accounts_cards/app/ui/pages/caja_page/caja_account_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/dashboard_page/dashboard_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/diners_page/diners_account_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/jep_pages/jep3406_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/jep_pages/jepJ406_account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +20,7 @@ class HomePageUpper {
     AP221AccountPage ap221AccountPage = AP221AccountPage();
     CAJAAccountPage cajaAccountPage = CAJAAccountPage();
     DinersAccountPage dinersAccountPage = DinersAccountPage();
-    JEP3406AccountPage jep3406AccountPage = JEP3406AccountPage();
+    JEPJ406AccountPage jep3406AccountPage = JEPJ406AccountPage();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
