@@ -7,6 +7,9 @@ import 'package:filepicker_windows/filepicker_windows.dart';
 
 class ExporterController extends GetxController {
   final ApiServiceOnAccount apiService = Get.find<ApiServiceOnAccount>();
+  final ApiServiceAccounting apiServiceAccounting =
+      Get.find<ApiServiceAccounting>();
+  List<MovimientoContable> data = [];
 
   var items =
       ['AP221', 'E201', 'P348', 'C092', 'Diners', 'J406', 'GENERAL'].obs;
@@ -21,10 +24,13 @@ class ExporterController extends GetxController {
       Get.snackbar('Error', 'No directory selected');
       return;
     }
-
-    List<MovimientoContable> data =
-        (await apiService.fetchData(selectedItem.value!))
-            .cast<MovimientoContable>();
+    if (selectedItem.value == 'GENERAL') {
+      data =
+          (await apiServiceAccounting.fetchData()).cast<MovimientoContable>();
+    } else {
+      data = (await apiService.fetchData(selectedItem.value!))
+          .cast<MovimientoContable>();
+    }
 
     var excel = Excel.createExcel();
     Sheet sheetObject = excel['Sheet1'];

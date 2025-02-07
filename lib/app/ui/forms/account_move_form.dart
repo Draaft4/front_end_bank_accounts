@@ -1,4 +1,5 @@
 import 'package:banck_accounts_cards/app/controllers/navigation_controller.dart';
+import 'package:banck_accounts_cards/app/data/database/databases.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +8,15 @@ import 'package:flutter/services.dart';
 
 class AccountMoveForm extends GetView<AccountMoveFormController> {
   final NavigationController navController = Get.put(NavigationController());
-
+  final Databases database = Get.find<Databases>();
+  RxList<String> clientes = ['test'].obs;
+  RxBool isActiveTextField = false.obs;
+  final Rx<String?> selectedCliente = Rx<String?>(null);
   AccountMoveForm({super.key});
+
+  void fechData() async {
+    clientes.value = await database.getAllClients();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +29,11 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
     if (accountOrigin != null) {
       controller.cuenta.value = accountOrigin;
       controller.cuentaController.text = accountOrigin;
+    } else {
+      controller.cuenta.value = '';
+      controller.cuentaController.text = '';
     }
+    fechData();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Crear nuevo movimiento contable'),
@@ -74,13 +86,40 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
             ),
             Row(
               children: [
+                const Text('Es un nuevo proveedor ?'),
+                Obx(() {
+                  return Checkbox(
+                    value: isActiveTextField.value,
+                    onChanged: (newValue) {
+                      isActiveTextField.value = newValue!;
+                    },
+                  );
+                }),
                 Expanded(
-                  child: _buildTextField(
-                    labelText: 'Cliente/Proveedor',
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) =>
-                        controller.clienteProveedor.value = value,
-                  ),
+                  child: Obx(() {
+                    return isActiveTextField.value
+                        ? _buildTextField(
+                            labelText: 'Cliente/Proveedor',
+                            keyboardType: TextInputType.text,
+                            onChanged: (value) =>
+                                controller.clienteProveedor.value = value,
+                          )
+                        : DropdownButton<String>(
+                            isExpanded: true,
+                            hint: const Text('Seleccione Cliente/Proveedor'),
+                            value: selectedCliente.value,
+                            onChanged: (newValue) {
+                              selectedCliente.value = newValue;
+                              controller.clienteProveedor.value = newValue!;
+                            },
+                            items: clientes.map((cliente) {
+                              return DropdownMenuItem<String>(
+                                value: cliente,
+                                child: Text(cliente),
+                              );
+                            }).toList(),
+                          );
+                  }),
                 ),
                 const SizedBox(width: 10),
                 Expanded(

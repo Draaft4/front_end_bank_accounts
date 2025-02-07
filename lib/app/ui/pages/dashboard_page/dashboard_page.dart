@@ -18,42 +18,12 @@ class DashboardPage {
 
   void fetchData() async {
     isLoading.value = true;
-    try {
-      if ((await apiService.getBalanceAP221()).body is int) {
-        balanceAp221.value =
-            (await apiService.getBalanceAP221()).body.toDouble();
-      } else {
-        balanceAp221.value = (await apiService.getBalanceAP221()).body;
-      }
-      if ((await apiService.getBalanceE210()).body is int) {
-        balanceE210.value = (await apiService.getBalanceE210()).body.toDouble();
-      } else {
-        balanceE210.value = (await apiService.getBalanceE210()).body;
-      }
-      if ((await apiService.getBalanceP348()).body is int) {
-        balanceP348.value = (await apiService.getBalanceP348()).body.toDouble();
-      } else {
-        balanceP348.value = (await apiService.getBalanceP348()).body;
-      }
-      if ((await apiService.getBalanceDiners()).body is int) {
-        balanceDiners.value =
-            (await apiService.getBalanceDiners()).body.toDouble();
-      } else {
-        balanceDiners.value = (await apiService.getBalanceDiners()).body;
-      }
-      if ((await apiService.getBalanceJ406()).body is int) {
-        balanceJ406.value = (await apiService.getBalanceJ406()).body.toDouble();
-      } else {
-        balanceJ406.value = (await apiService.getBalanceJ406()).body;
-      }
-      if ((await apiService.getBalanceC092()).body is int) {
-        balanceC092.value = (await apiService.getBalanceC092()).body.toDouble();
-      } else {
-        balanceC092.value = (await apiService.getBalanceC092()).body;
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    }
+    balanceDiners.value = await apiService.getBalance('Diners');
+    balanceJ406.value = await apiService.getBalance('J406');
+    balanceC092.value = await apiService.getBalance('C092');
+    balanceAp221.value = await apiService.getBalance('AP221');
+    balanceE210.value = await apiService.getBalance('E210');
+    balanceP348.value = await apiService.getBalance('P348');
     isLoading.value = false;
   }
 
