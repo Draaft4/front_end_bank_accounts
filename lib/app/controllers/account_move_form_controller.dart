@@ -19,6 +19,7 @@ class AccountMoveFormController extends GetxController {
   var total = 0.0.obs;
   var retencion = 0.0.obs;
   var mesAno = ''.obs;
+  var cuentaIntera = ''.obs;
 
   TextEditingController cuentaController = TextEditingController();
   ApiServiceAccounting apiService = Get.find<ApiServiceAccounting>();
@@ -72,7 +73,6 @@ class AccountMoveFormController extends GetxController {
     if (numeroFactura.value.isEmpty) camposVacios.add('Número de Factura');
     if (numeroCI.value.isEmpty) camposVacios.add('Número de CI');
     if (descripcion.value.isEmpty) camposVacios.add('Descripción');
-    if (mesAno.value.isEmpty) camposVacios.add('Mes/Año');
 
     if (camposVacios.isNotEmpty) {
       Get.snackbar(
@@ -98,6 +98,7 @@ class AccountMoveFormController extends GetxController {
       saldo: saldo.value,
       total: total.value,
       retencion: retencion.value,
+      cuentaInterna: cuentaIntera.value,
     );
     apiService.createAccountMove(movimiento);
     Get.back();

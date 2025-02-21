@@ -16,6 +16,7 @@ class MovimientoContable {
   double? saldo;
   double? total;
   double? retencion;
+  String? cuentaInterna;
 
   MovimientoContable({
     this.id,
@@ -33,25 +34,30 @@ class MovimientoContable {
     this.saldo,
     this.total,
     this.retencion,
+    this.cuentaInterna,
   });
 
   factory MovimientoContable.fromJson(Map<String, dynamic> json) {
     return MovimientoContable(
       id: json['id'],
       fecha: json['fecha'] != null ? DateTime.parse(json['fecha']) : null,
-      fechaCompra: json['fechaCompra'] != null ? DateTime.parse(json['fechaCompra']) : null,
+      fechaCompra: json['fechaCompra'] != null
+          ? DateTime.parse(json['fechaCompra'])
+          : null,
       mesAno: json['mesAno'],
       cuenta: json['cuenta'],
       clienteProveedor: json['clienteProveedor'],
       numeroFactura: json['numeroFactura'],
       numeroCI: json['numeroCI'],
       descripcion: json['descripcion'],
-      fechaPago: json['fechaPago'] != null ? DateTime.parse(json['fechaPago']) : null,
+      fechaPago:
+          json['fechaPago'] != null ? DateTime.parse(json['fechaPago']) : null,
       ingreso: json['ingreso']?.toDouble(),
       egreso: json['egreso']?.toDouble(),
       saldo: json['saldo']?.toDouble(),
       total: json['total']?.toDouble(),
       retencion: json['retencion']?.toDouble(),
+      cuentaInterna: json['cuentaInterna'],
     );
   }
 
@@ -60,7 +66,8 @@ class MovimientoContable {
     return {
       'id': id,
       'fecha': fecha != null ? formatter.format(fecha!) : null,
-      'fechaCompra': fechaCompra != null ? formatter.format(fechaCompra!) : null,
+      'fechaCompra':
+          fechaCompra != null ? formatter.format(fechaCompra!) : null,
       'mesAno': mesAno,
       'cuenta': cuenta,
       'clienteProveedor': clienteProveedor,
@@ -73,6 +80,7 @@ class MovimientoContable {
       'saldo': saldo,
       'total': total,
       'retencion': retencion,
+      'cuentaInterna': cuentaInterna,
     };
   }
 }

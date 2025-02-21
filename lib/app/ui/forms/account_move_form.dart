@@ -9,13 +9,32 @@ import 'package:flutter/services.dart';
 class AccountMoveForm extends GetView<AccountMoveFormController> {
   final NavigationController navController = Get.put(NavigationController());
   final Databases database = Get.find<Databases>();
+  RxList<String> cuentas =
+      ['Efectivo', 'AP221', 'E210', 'P348', 'Diners', 'C092', 'J406'].obs;
+  RxList<String> cuentasInterna = [
+    'ANTICIPO',
+    'EVENTOS',
+    'INGRESO EVENTOS',
+    'INVERSION',
+    'PRESTAMOS',
+    'RENDIMIENTOS FINANCIEROS',
+    'UTILIDADES'
+  ].obs;
+  final Rx<String?> selectedCuenta = Rx<String?>(null);
+  final Rx<String?> selectedCuentaInterna = Rx<String?>(null);
   RxList<String> clientes = ['test'].obs;
   RxBool isActiveTextField = false.obs;
+  RxDouble saldo = 0.0.obs;
   final Rx<String?> selectedCliente = Rx<String?>(null);
+  RxBool isIngresoEnabled = true.obs;
+  RxBool isEgresoEnabled = true.obs;
+
   AccountMoveForm({super.key});
 
   void fechData() async {
     clientes.value = await database.getAllClients();
+    saldo.value = await database.getTotalSaldo(controller.cuenta.value);
+    controller.saldo.value = saldo.value;
   }
 
   @override
@@ -26,12 +45,12 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
     );
     final args = Get.arguments;
     final accountOrigin = args['account_origin'];
-    if (accountOrigin != null) {
+    if (accountOrigin != null && cuentas.contains(accountOrigin)) {
       controller.cuenta.value = accountOrigin;
-      controller.cuentaController.text = accountOrigin;
+      selectedCuenta.value = accountOrigin;
     } else {
       controller.cuenta.value = '';
-      controller.cuentaController.text = '';
+      selectedCuenta.value = null;
     }
     fechData();
     return Scaffold(
@@ -51,12 +70,43 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
             Row(
               children: [
                 Expanded(
-                  child: _buildTextField(
-                    controller: controller.cuentaController,
-                    labelText: 'Cuenta',
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) => controller.cuenta.value = value,
-                  ),
+                  child: Obx(() {
+                    return DropdownButton<String>(
+                      isExpanded: true,
+                      hint: const Text('Seleccione Cuenta'),
+                      value: selectedCuentaInterna.value,
+                      onChanged: (newValue) {
+                        selectedCuentaInterna.value = newValue;
+                        controller.cuentaIntera.value = newValue!;
+                      },
+                      items: cuentasInterna.map((cuenta) {
+                        return DropdownMenuItem<String>(
+                          value: cuenta,
+                          child: Text(cuenta),
+                        );
+                      }).toList(),
+                    );
+                  }),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Obx(() {
+                    return DropdownButton<String>(
+                      isExpanded: true,
+                      hint: const Text('Seleccione Cuenta Bancaria'),
+                      value: selectedCuenta.value,
+                      onChanged: (newValue) {
+                        selectedCuenta.value = newValue;
+                        controller.cuenta.value = newValue!;
+                      },
+                      items: cuentas.map((cuenta) {
+                        return DropdownMenuItem<String>(
+                          value: cuenta,
+                          child: Text(cuenta),
+                        );
+                      }).toList(),
+                    );
+                  }),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -75,13 +125,13 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                       )),
                 ),
                 const SizedBox(width: 10),
-                Expanded(
-                  child: _buildTextField(
-                    labelText: 'Mes/Año (MM/YYYY)',
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) => controller.mesAno.value = value,
-                  ),
-                ),
+                // Expanded(
+                //   child: _buildTextField(
+                //     labelText: 'Mes/Año (MM/YYYY)',
+                //     keyboardType: TextInputType.text,
+                //     onChanged: (value) => controller.mesAno.value = value,
+                //   ),
+                // ),
               ],
             ),
             Row(
@@ -161,32 +211,55 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
             Row(
               children: [
                 Expanded(
-                  child: _buildTextField(
-                    labelText: 'Ingreso',
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    onChanged: (value) => controller.ingreso.value =
-                        double.tryParse(value) ?? 0.0,
-                  ),
+                  child: Obx(() => _buildTextField(
+                        labelText: 'Ingreso',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        onChanged: (value) {
+                          controller.ingreso.value =
+                              double.tryParse(value) ?? 0.0;
+                          isEgresoEnabled.value = value.isEmpty;
+                          if (!isEgresoEnabled.value) {
+                            controller.egreso.value = 0.0;
+                          }
+                        },
+                        isEnabled: isIngresoEnabled.value,
+                      )),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: _buildTextField(
-                    labelText: 'Egreso',
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    onChanged: (value) =>
-                        controller.egreso.value = double.tryParse(value) ?? 0.0,
-                  ),
+                  child: Obx(() => _buildTextField(
+                        labelText: 'Egreso',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        onChanged: (value) {
+                          controller.egreso.value =
+                              double.tryParse(value) ?? 0.0;
+                          isIngresoEnabled.value = value.isEmpty;
+                          if (!isIngresoEnabled.value) {
+                            controller.ingreso.value = 0.0;
+                          }
+                        },
+                        isEnabled: isEgresoEnabled.value,
+                      )),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: _buildTextField(
-                    labelText: 'Saldo',
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    onChanged: (value) =>
-                        controller.saldo.value = double.tryParse(value) ?? 0.0,
+                  child: Obx(
+                    () => _buildTextField(
+                      isEnabled: false,
+                      labelText: 'Saldo',
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value) => controller.saldo.value =
+                          double.tryParse(value) ?? 0.0,
+                      controller:
+                          TextEditingController(text: saldo.value.toString()),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -242,17 +315,18 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
     );
   }
 
-  Widget _buildTextField({
-    TextEditingController? controller,
-    required String labelText,
-    TextInputType? keyboardType,
-    List<TextInputFormatter>? inputFormatters,
-    int maxLines = 1,
-    required ValueChanged<String> onChanged,
-  }) {
+  Widget _buildTextField(
+      {TextEditingController? controller,
+      required String labelText,
+      TextInputType? keyboardType,
+      List<TextInputFormatter>? inputFormatters,
+      int maxLines = 1,
+      required ValueChanged<String> onChanged,
+      bool isEnabled = true}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
+        enabled: isEnabled,
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,

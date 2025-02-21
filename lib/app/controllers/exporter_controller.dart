@@ -11,8 +11,16 @@ class ExporterController extends GetxController {
       Get.find<ApiServiceAccounting>();
   List<MovimientoContable> data = [];
 
-  var items =
-      ['AP221', 'E201', 'P348', 'C092', 'Diners', 'J406', 'GENERAL'].obs;
+  var items = [
+    'Efectivo',
+    'AP221',
+    'E210',
+    'P348',
+    'C092',
+    'Diners',
+    'J406',
+    'GENERAL'
+  ].obs;
   var selectedItem = RxnString();
 
   void setSelectedItem(String? value) {
@@ -40,8 +48,9 @@ class ExporterController extends GetxController {
       TextCellValue('ID'),
       TextCellValue('Fecha'),
       TextCellValue('Fecha Compra'),
-      TextCellValue('Mes/Año'),
+      // TextCellValue('Mes/Año'),
       TextCellValue('Cuenta'),
+      TextCellValue('Cuenta Bancaria'),
       TextCellValue('Cliente/Proveedor'),
       TextCellValue('Número Factura'),
       TextCellValue('Número CI'),
@@ -60,7 +69,8 @@ class ExporterController extends GetxController {
         TextCellValue(item.id.toString()),
         TextCellValue(item.fecha!.toIso8601String()),
         TextCellValue(item.fechaCompra!.toIso8601String()),
-        TextCellValue(item.mesAno.toString()),
+        // TextCellValue(item.mesAno.toString()),
+        TextCellValue(item.cuentaInterna.toString()),
         TextCellValue(item.cuenta.toString()),
         TextCellValue(item.clienteProveedor.toString()),
         TextCellValue(item.numeroFactura.toString()),

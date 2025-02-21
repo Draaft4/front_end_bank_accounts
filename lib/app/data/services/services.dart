@@ -18,10 +18,18 @@ class ApiServiceAccounting extends BaseApiService {
   Future<double> getBalance(String cuenta) async {
     return databases.getTotalSaldo(cuenta);
   }
+
+  Future<void> updateAccountMove(MovimientoContable accountMove) async {
+    await databases.updateMove(accountMove);
+  }
 }
 
 class ApiServiceOnAccount extends BaseApiService {
   Future<List> fetchData(String account) async {
     return databases.getMoves(account);
+  }
+
+  Future<void> updateAccountMove(MovimientoContable accountMove) async {
+    await databases.updateMove(accountMove);
   }
 }

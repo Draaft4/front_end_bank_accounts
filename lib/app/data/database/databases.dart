@@ -27,6 +27,7 @@ class Databases extends GetxController {
       fecha TEXT,
       fechaCompra TEXT,
       mesAno TEXT,
+      cuentaInterna TEXT,
       cuenta TEXT,
       clienteProveedor TEXT,
       numeroFactura TEXT,

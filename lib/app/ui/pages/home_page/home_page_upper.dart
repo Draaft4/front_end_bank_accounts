@@ -4,6 +4,7 @@ import 'package:banck_accounts_cards/app/ui/pages/bp_pages/ap221_account_page.da
 import 'package:banck_accounts_cards/app/ui/pages/bp_pages/e210_account_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/bp_pages/p348_account_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/caja_page/caja_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/cash_page/cash_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/dashboard_page/dashboard_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/diners_page/diners_account_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/jep_pages/jepJ406_account_page.dart';
@@ -21,9 +22,11 @@ class HomePageUpper {
     CAJAAccountPage cajaAccountPage = CAJAAccountPage();
     DinersAccountPage dinersAccountPage = DinersAccountPage();
     JEPJ406AccountPage jep3406AccountPage = JEPJ406AccountPage();
+    CashPage cashPage = CashPage();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Center(child: sideBar()),
           Obx(() {
@@ -39,6 +42,12 @@ class HomePageUpper {
                   width: screenWidth - 266,
                   height: screenHeight,
                   child: accountingPage.dasboard(context),
+                );
+              case 'Efectivo':
+                return SizedBox(
+                  width: screenWidth - 266,
+                  height: screenHeight,
+                  child: cashPage.dasboard(context),
                 );
               case 'Cuenta Pichincha E210':
                 return SizedBox(
@@ -95,6 +104,7 @@ class HomePageUpper {
           const Divider(),
           optionsButton("Principal", Icons.dashboard),
           optionsButton("Contabilidad", Icons.analytics_outlined),
+          optionsButton("Efectivo", Icons.money),
           optionsButton("Cuenta Pichincha E210", 'static/bp_logo.png'),
           optionsButton("Cuenta Pichincha P348", 'static/bp_logo.png'),
           optionsButton("Cuenta Pichincha AP221", 'static/bp_logo.png'),

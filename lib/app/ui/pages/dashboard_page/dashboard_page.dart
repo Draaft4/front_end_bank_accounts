@@ -13,6 +13,7 @@ class DashboardPage {
   RxDouble balanceDiners = 0.0.obs;
   RxDouble balanceJ406 = 0.0.obs;
   RxDouble balanceC092 = 0.0.obs;
+  RxDouble balanceCash = 0.0.obs;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -24,6 +25,7 @@ class DashboardPage {
     balanceAp221.value = await apiService.getBalance('AP221');
     balanceE210.value = await apiService.getBalance('E210');
     balanceP348.value = await apiService.getBalance('P348');
+    balanceCash.value = await apiService.getBalance('Efectivo');
     isLoading.value = false;
   }
 
@@ -77,10 +79,14 @@ class DashboardPage {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        _buildCard('Balance total Efectivo', 'static/money.png',
+                            balanceCash.value.toString()),
+                        const SizedBox(width: 20),
                         _buildCard('Balance total AP221', 'static/bp_logo.png',
                             balanceAp221.value.toString()),
                         const SizedBox(width: 20),
@@ -125,24 +131,27 @@ class DashboardPage {
         width: 200,
         height: 200,
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(iconPath, height: 50, width: 50),
-            const SizedBox(height: 10),
-            Center(
-              child: Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(iconPath, height: 50, width: 50),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Text(
+                value,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
     );

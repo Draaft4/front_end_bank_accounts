@@ -1,16 +1,15 @@
 import 'package:banck_accounts_cards/app/data/models/account_move_model.dart';
 import 'package:banck_accounts_cards/app/data/services/services.dart';
 import 'package:banck_accounts_cards/app/ui/forms/account_move_form.dart';
+import 'package:banck_accounts_cards/app/ui/pages/exporter_page/exporter_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class AccountingPage {
-  final ApiServiceAccounting apiService = Get.find<ApiServiceAccounting>();
+class CashPage {
+  final ApiServiceOnAccount apiService = Get.find<ApiServiceOnAccount>();
   RxList<MovimientoContable> movimientos = <MovimientoContable>[].obs;
   RxBool isLoading = false.obs;
-
-  final ScrollController _scrollController = ScrollController();
 
   final TextEditingController idFilterController = TextEditingController();
   final TextEditingController fechaFilterController = TextEditingController();
@@ -33,14 +32,15 @@ class AccountingPage {
   final TextEditingController totalFilterController = TextEditingController();
   final TextEditingController retencionFilterController =
       TextEditingController();
+
   final TextEditingController cuentaInternaController = TextEditingController();
+
+  final ScrollController _scrollController = ScrollController();
 
   void fetchData() async {
     isLoading.value = true;
     List<MovimientoContable> allMovimientos =
-        (await apiService.fetchData()).cast<MovimientoContable>();
-
-    // Apply filters
+        (await apiService.fetchData("Efectivo")).cast<MovimientoContable>();
     movimientos.value = allMovimientos.where((movimiento) {
       bool matches = true;
       if (idFilterController.text.isNotEmpty) {
@@ -123,7 +123,6 @@ class AccountingPage {
       }
       return matches;
     }).toList();
-
     isLoading.value = false;
   }
 
@@ -136,19 +135,26 @@ class AccountingPage {
     fetchData();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contabilidad'),
+        title: const Text('Cuenta en Efectivo'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
               Get.to(() => AccountMoveForm(),
-                  arguments: {'account_origin': ''});
+                  arguments: {'account_origin': 'Efectivo'});
             },
           ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
               fetchData();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.save_alt),
+            onPressed: () {
+              Get.to(() => ExporterPage(),
+                  arguments: {'account_origin': 'Efectivo'});
             },
           ),
         ],
@@ -179,11 +185,9 @@ class AccountingPage {
                 const Text('Filtros', style: TextStyle(fontSize: 20)),
                 DataTable(
                   columns: const [
-                    // DataColumn(label: Text('ID')),
                     DataColumn(label: Text('Fecha')),
                     DataColumn(label: Text('Fecha Compra')),
                     DataColumn(label: Text('Cuenta')),
-                    DataColumn(label: Text('Cuenta Bancaria')),
                     DataColumn(label: Text('Cliente/Proveedor')),
                     DataColumn(label: Text('Número Factura')),
                     DataColumn(label: Text('Número CI')),
@@ -197,12 +201,6 @@ class AccountingPage {
                   ],
                   rows: [
                     DataRow(cells: [
-                      // DataCell(TextField(
-                      //   controller: idFilterController,
-                      //   decoration:
-                      //       const InputDecoration(hintText: 'ID'),
-                      //   onChanged: (value) => fetchData(),
-                      // )),
                       DataCell(TextField(
                         controller: fechaFilterController,
                         decoration:
@@ -218,12 +216,6 @@ class AccountingPage {
                       DataCell(TextField(
                         controller: cuentaInternaController,
                         decoration: const InputDecoration(hintText: 'Cuenta'),
-                        onChanged: (value) => fetchData(),
-                      )),
-                      DataCell(TextField(
-                        controller: cuentaFilterController,
-                        decoration:
-                            const InputDecoration(hintText: 'Cuenta Bancaria'),
                         onChanged: (value) => fetchData(),
                       )),
                       DataCell(TextField(
@@ -291,11 +283,9 @@ class AccountingPage {
                 const Text('Contenidos', style: TextStyle(fontSize: 20)),
                 DataTable(
                   columns: const [
-                    // DataColumn(label: Text('ID')),
                     DataColumn(label: Text('Fecha')),
                     DataColumn(label: Text('Fecha Compra')),
                     DataColumn(label: Text('Cuenta')),
-                    DataColumn(label: Text('Cuenta Bancaria')),
                     DataColumn(label: Text('Cliente/Proveedor')),
                     DataColumn(label: Text('Número Factura')),
                     DataColumn(label: Text('Número CI')),
@@ -309,8 +299,6 @@ class AccountingPage {
                   ],
                   rows: movimientos.map((movimiento) {
                     return DataRow(cells: [
-                      // DataCell(SizedBox(
-                      //     width: 20, child: Text(movimiento.id.toString()))),
                       DataCell(TextField(
                         controller: TextEditingController(
                           text: movimiento.fecha != null
@@ -343,15 +331,6 @@ class AccountingPage {
                         ),
                         onSubmitted: (value) {
                           movimiento.cuentaInterna = value;
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.cuenta ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.cuenta = value;
                           updateMovimiento(movimiento);
                         },
                       )),
