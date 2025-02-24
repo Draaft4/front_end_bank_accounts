@@ -61,6 +61,18 @@ class Databases extends GetxController {
     return [];
   }
 
+  Future<List<MovimientoContable>> getInternalAccount(String cuenta) async {
+    List<Map<String, dynamic>> maps = await database.query(
+      'account_moves',
+      where: 'cuentaInterna = ?',
+      whereArgs: [cuenta],
+    );
+    if (maps.isNotEmpty) {
+      return maps.map((map) => MovimientoContable.fromJson(map)).toList();
+    }
+    return [];
+  }
+
   Future<List<MovimientoContable>> getAllMoves() async {
     List<Map<String, dynamic>> maps = await database.query('account_moves');
     return List.generate(maps.length, (i) {
