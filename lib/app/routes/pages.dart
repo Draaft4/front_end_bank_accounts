@@ -1,9 +1,11 @@
 import 'package:banck_accounts_cards/app/bindings/account_move_form_binding.dart';
+import 'package:banck_accounts_cards/app/bindings/account_transaction_form_binding.dart';
 import 'package:banck_accounts_cards/app/bindings/exporter_binding.dart';
 import 'package:banck_accounts_cards/app/bindings/home_binding.dart';
 import 'package:banck_accounts_cards/app/bindings/splash_binding.dart';
 import 'package:banck_accounts_cards/app/routes/routes.dart';
 import 'package:banck_accounts_cards/app/ui/forms/account_move_form.dart';
+import 'package:banck_accounts_cards/app/ui/forms/account_transaction_form.dart';
 import 'package:banck_accounts_cards/app/ui/pages/exporter_page/exporter_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/home_page/home_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/splash_page/splash_page.dart';
@@ -30,6 +32,11 @@ class AppPages {
       name: Routes.EXPORT,
       page: () => ExporterPage(),
       binding: ExporterBinding(),
+    ),
+    GetPage(
+      name: Routes.TRANSACTION,
+      page: () => AccountTransactionForm(),
+      binding: AccountTransactionFormBinding(),
     ),
   ];
 }

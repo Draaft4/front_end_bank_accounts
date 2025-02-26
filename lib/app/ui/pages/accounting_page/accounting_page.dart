@@ -1,6 +1,8 @@
 import 'package:banck_accounts_cards/app/data/models/account_move_model.dart';
 import 'package:banck_accounts_cards/app/data/services/services.dart';
 import 'package:banck_accounts_cards/app/ui/forms/account_move_form.dart';
+import 'package:banck_accounts_cards/app/ui/forms/account_transaction_form.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -142,6 +144,18 @@ class AccountingPage {
       appBar: AppBar(
         title: const Text('Contabilidad'),
         actions: [
+          CupertinoButton(
+              child: const Row(
+                children: [
+                  Text('Transferencia a cuenta'),
+                  SizedBox(width: 10),
+                  Icon(Icons.swap_horiz),
+                ],
+              ),
+              onPressed: () {
+                Get.to(() => AccountTransactionForm(),
+                    arguments: {'account_origin': ''});
+              }),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
