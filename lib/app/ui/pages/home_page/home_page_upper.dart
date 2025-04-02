@@ -1,20 +1,26 @@
 import 'package:banck_accounts_cards/app/controllers/navigation_controller.dart';
 import 'package:banck_accounts_cards/app/ui/pages/accounting_page/accounting_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/advance_page/advance_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/bp_pages/ap221_account_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/bp_pages/e210_account_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/bp_pages/p348_account_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/caja_page/caja_account_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/cash_page/cash_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/other_accounts_pages/bank1_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/other_accounts_pages/bank2_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/internal_accounts/advance_page/advance_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/bp_pages/ap221_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/bp_pages/e210_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/bp_pages/p348_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/caja_page/caja_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/cash_page/cash_page.dart';
 import 'package:banck_accounts_cards/app/ui/pages/dashboard_page/dashboard_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/diners_page/diners_account_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/event_entry_page/event_entry_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/events_page/events_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/financial_returns_page/financial_returns_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/invesment_page/invesment_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/jep_pages/jepJ406_account_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/loans_page/loans_page.dart';
-import 'package:banck_accounts_cards/app/ui/pages/utilities_page/utilities_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/diners_page/diners_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/internal_accounts/event_entry_page/event_entry_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/internal_accounts/events_page/events_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/internal_accounts/financial_returns_page/financial_returns_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/internal_accounts/invesment_page/invesment_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/bank_accounts/jep_pages/jepJ406_account_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/internal_accounts/loans_page/loans_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/internal_accounts/utilities_page/utilities_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/personal_accounts/family_leases_page/family_leases_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/personal_accounts/lisboa_building_page/lisboa_building_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/personal_accounts/monsalve_moscoso_page/monsalve_moscoso_page.dart';
+import 'package:banck_accounts_cards/app/ui/pages/personal_accounts/paul_monsalve_page/paul_monsalve_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,6 +43,12 @@ class HomePageUpper {
     FinancialReturnsPage financialReturnsPage = FinancialReturnsPage();
     UtilitiesPage utilitiesPage = UtilitiesPage();
     CashPage cashPage = CashPage();
+    LisboaBuildingPage lisboaBuildingPage = LisboaBuildingPage();
+    PaulMonsalvePage paulMonsalvePage = PaulMonsalvePage();
+    MonsalveMoscosoPage monsalveMoscosoPage = MonsalveMoscosoPage();
+    FamilyLeasesPage familyLeasesPage = FamilyLeasesPage();
+    Bank1Page bank1Page = Bank1Page();
+    Bank2Page bank2Page = Bank2Page();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -99,6 +111,18 @@ class HomePageUpper {
                   height: screenHeight,
                   child: cajaAccountPage.dasboard(context),
                 );
+              case 'Cuenta Banco 1':
+                return SizedBox(
+                  width: screenWidth - 266,
+                  height: screenHeight,
+                  child: bank1Page.dasboard(context),
+                );
+              case 'Cuenta Banco 2':
+                return SizedBox(
+                  width: screenWidth - 266,
+                  height: screenHeight,
+                  child: bank2Page.dasboard(context),
+                );
               case 'Cuenta Anticipos':
                 return SizedBox(
                   width: screenWidth - 266,
@@ -141,6 +165,30 @@ class HomePageUpper {
                   height: screenHeight,
                   child: utilitiesPage.dasboard(context),
                 );
+              case 'Alicuotas Edificio Lisboa':
+                return SizedBox(
+                  width: screenWidth - 266,
+                  height: screenHeight,
+                  child: lisboaBuildingPage.dasboard(context),
+                );
+              case 'Cont. Pers. Paul Monsalve':
+                return SizedBox(
+                  width: screenWidth - 266,
+                  height: screenHeight,
+                  child: paulMonsalvePage.dasboard(context),
+                );
+              case 'Hnos. Monsalve Moscoso':
+                return SizedBox(
+                  width: screenWidth - 266,
+                  height: screenHeight,
+                  child: monsalveMoscosoPage.dasboard(context),
+                );
+              case 'Arriendos Familia':
+                return SizedBox(
+                  width: screenWidth - 266,
+                  height: screenHeight,
+                  child: familyLeasesPage.dasboard(context),
+                );
               default:
                 return const Center(child: Text("Page not found"));
             }
@@ -180,6 +228,8 @@ class HomePageUpper {
           optionsButton("Cuenta Diners Club", 'static/diners_logo.png'),
           optionsButton("Cuenta Jep J406", 'static/jep_logo.png'),
           optionsButton("Cuenta Coop Caja", 'static/caja_logo.png'),
+          optionsButton("Cuenta Banco 1", Icons.account_balance_wallet_rounded),
+          optionsButton("Cuenta Banco 2", Icons.account_balance_wallet_rounded),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -200,6 +250,23 @@ class HomePageUpper {
           optionsButton("Cuenta Prestamos", Icons.account_balance_wallet),
           optionsButton("Cuenta Rend. Financieros", Icons.show_chart),
           optionsButton("Cuenta Utilidades", Icons.pie_chart),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text("Cuentas Personales"),
+              ),
+            ),
+          ),
+          optionsButton("Alicuotas Edificio Lisboa", Icons.apartment_sharp),
+          optionsButton("Cont. Pers. Paul Monsalve", Icons.account_circle),
+          optionsButton("Hnos. Monsalve Moscoso", Icons.family_restroom),
+          optionsButton("Arriendos Familia", Icons.add_home_work_rounded),
         ],
       ),
     );

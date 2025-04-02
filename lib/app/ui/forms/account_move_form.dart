@@ -9,8 +9,17 @@ import 'package:flutter/services.dart';
 class AccountMoveForm extends GetView<AccountMoveFormController> {
   final NavigationController navController = Get.put(NavigationController());
   final Databases database = Get.find<Databases>();
-  RxList<String> cuentas =
-      ['Efectivo', 'AP221', 'E210', 'P348', 'Diners', 'C092', 'J406'].obs;
+  RxList<String> cuentas = [
+    'Efectivo',
+    'AP221',
+    'E210',
+    'P348',
+    'Diners',
+    'C092',
+    'J406',
+    'Banco 1',
+    'Banco 2'
+  ].obs;
   RxList<String> cuentasInterna = [
     'ANTICIPO',
     'EVENTOS',
@@ -20,6 +29,12 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
     'RENDIMIENTOS FINANCIEROS',
     'UTILIDADES'
   ].obs;
+  RxList<String> cuentasPersonales = [
+    'Alicuotas Edificio Lisboa',
+    'Contabilidad Personal Paul Monsalve',
+    'Hermanos Monsalve Moscoso',
+    'Arriendos Familia',
+  ].obs;
   final Rx<String?> selectedCuenta = Rx<String?>(null);
   final Rx<String?> selectedCuentaInterna = Rx<String?>(null);
   RxList<String> clientes = ['test'].obs;
@@ -28,6 +43,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
   final Rx<String?> selectedCliente = Rx<String?>(null);
   RxBool isIngresoEnabled = true.obs;
   RxBool isEgresoEnabled = true.obs;
+  RxBool isPersonalAccount = false.obs;
 
   AccountMoveForm({super.key});
 
@@ -48,9 +64,16 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
     if (accountOrigin != null && cuentas.contains(accountOrigin)) {
       controller.cuenta.value = accountOrigin;
       selectedCuenta.value = accountOrigin;
+      isPersonalAccount.value = false;
     } else {
-      controller.cuenta.value = '';
-      selectedCuenta.value = null;
+      if (accountOrigin != null && cuentasPersonales.contains(accountOrigin)) {
+        controller.cuenta.value = accountOrigin;
+        selectedCuenta.value = accountOrigin;
+        isPersonalAccount.value = true;
+      } else {
+        controller.cuenta.value = '';
+        selectedCuenta.value = null;
+      }
     }
     fechData();
     return Scaffold(
@@ -71,6 +94,45 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
               children: [
                 Expanded(
                   child: Obx(() {
+                    return CheckboxListTile(
+                      title: const Text('Usar cuentas personales'),
+                      value: isPersonalAccount.value,
+                      onChanged: (newValue) {
+                        isPersonalAccount.value = newValue!;
+                        selectedCuenta.value = null;
+                      },
+                    );
+                  }),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Obx(() {
+                    return DropdownButton<String>(
+                      isExpanded: true,
+                      hint: const Text('Seleccione Cuenta *'),
+                      value: selectedCuenta.value,
+                      onChanged: (newValue) {
+                        selectedCuenta.value = newValue;
+                        controller.cuenta.value = newValue!;
+                      },
+                      items: (isPersonalAccount.value
+                              ? cuentasPersonales
+                              : cuentas)
+                          .map((cuenta) {
+                        return DropdownMenuItem<String>(
+                          value: cuenta,
+                          child: Text(cuenta),
+                        );
+                      }).toList(),
+                    );
+                  }),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Obx(() {
                     return DropdownButton<String>(
                       isExpanded: true,
                       hint: const Text('Seleccione Cuenta'),
@@ -80,26 +142,6 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                         controller.cuentaIntera.value = newValue!;
                       },
                       items: cuentasInterna.map((cuenta) {
-                        return DropdownMenuItem<String>(
-                          value: cuenta,
-                          child: Text(cuenta),
-                        );
-                      }).toList(),
-                    );
-                  }),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Obx(() {
-                    return DropdownButton<String>(
-                      isExpanded: true,
-                      hint: const Text('Seleccione Cuenta Bancaria'),
-                      value: selectedCuenta.value,
-                      onChanged: (newValue) {
-                        selectedCuenta.value = newValue;
-                        controller.cuenta.value = newValue!;
-                      },
-                      items: cuentas.map((cuenta) {
                         return DropdownMenuItem<String>(
                           value: cuenta,
                           child: Text(cuenta),
@@ -125,13 +167,6 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                       )),
                 ),
                 const SizedBox(width: 10),
-                // Expanded(
-                //   child: _buildTextField(
-                //     labelText: 'Mes/Año (MM/YYYY)',
-                //     keyboardType: TextInputType.text,
-                //     onChanged: (value) => controller.mesAno.value = value,
-                //   ),
-                // ),
               ],
             ),
             Row(
@@ -156,7 +191,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                           )
                         : DropdownButton<String>(
                             isExpanded: true,
-                            hint: const Text('Seleccione Cliente/Proveedor'),
+                            hint: const Text('Seleccione Cliente/Proveedor *'),
                             value: selectedCliente.value,
                             onChanged: (newValue) {
                               selectedCliente.value = newValue;
@@ -174,7 +209,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _buildTextField(
-                    labelText: 'Número Factura',
+                    labelText: 'Número Factura *',
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (value) =>
@@ -184,7 +219,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
               ],
             ),
             _buildTextField(
-              labelText: 'Descripción',
+              labelText: 'Descripción  *',
               maxLines: 5,
               onChanged: (value) => controller.descripcion.value = value,
             ),
@@ -192,7 +227,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
               children: [
                 Expanded(
                   child: _buildTextField(
-                    labelText: 'Número CI',
+                    labelText: 'Número CI *',
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (value) => controller.numeroCI.value = value,
@@ -212,7 +247,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
               children: [
                 Expanded(
                   child: Obx(() => _buildTextField(
-                        labelText: 'Ingreso',
+                        labelText: 'Ingreso *',
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
@@ -231,7 +266,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Obx(() => _buildTextField(
-                        labelText: 'Egreso',
+                        labelText: 'Egreso *',
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
@@ -265,7 +300,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _buildTextField(
-                    labelText: 'Total',
+                    labelText: 'Total *',
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (value) =>

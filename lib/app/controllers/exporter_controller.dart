@@ -19,6 +19,8 @@ class ExporterController extends GetxController {
     'C092',
     'Diners',
     'J406',
+    'Banco 1',
+    'Banco 2',
     'GENERAL'
   ].obs;
   var selectedItem = RxnString();

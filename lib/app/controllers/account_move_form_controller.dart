@@ -73,7 +73,6 @@ class AccountMoveFormController extends GetxController {
     if (numeroFactura.value.isEmpty) camposVacios.add('Número de Factura');
     if (numeroCI.value.isEmpty) camposVacios.add('Número de CI');
     if (descripcion.value.isEmpty) camposVacios.add('Descripción');
-
     if (camposVacios.isNotEmpty) {
       Get.snackbar(
         'Error',
