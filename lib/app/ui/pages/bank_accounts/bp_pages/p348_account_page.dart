@@ -26,8 +26,6 @@ class P348AccountPage {
       TextEditingController();
   final TextEditingController descripcionFilterController =
       TextEditingController();
-  final TextEditingController fechaPagoFilterController =
-      TextEditingController();
   final TextEditingController ingresoFilterController = TextEditingController();
   final TextEditingController egresoFilterController = TextEditingController();
   final TextEditingController saldoFilterController = TextEditingController();
@@ -38,6 +36,10 @@ class P348AccountPage {
   final TextEditingController cuentaInternaController = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
+
+  // Variables para el estado de ordenamiento
+  int? _sortColumnIndex;
+  bool _isAscending = true;
 
   void fetchData() async {
     isLoading.value = true;
@@ -83,12 +85,6 @@ class P348AccountPage {
         matches &= movimiento.descripcion
                 ?.contains(descripcionFilterController.text) ??
             false;
-      }
-      if (fechaPagoFilterController.text.isNotEmpty) {
-        matches &= movimiento.fechaPago != null &&
-            DateFormat('yyyy-MM-dd')
-                .format(movimiento.fechaPago!)
-                .contains(fechaPagoFilterController.text);
       }
       if (ingresoFilterController.text.isNotEmpty) {
         matches &= movimiento.ingreso
@@ -206,7 +202,6 @@ class P348AccountPage {
                     DataColumn(label: Text('Número Factura')),
                     DataColumn(label: Text('Número CI')),
                     DataColumn(label: Text('Descripción')),
-                    DataColumn(label: Text('Fecha Pago')),
                     DataColumn(label: Text('Ingreso')),
                     DataColumn(label: Text('Egreso')),
                     DataColumn(label: Text('Saldo')),
@@ -257,12 +252,6 @@ class P348AccountPage {
                         onChanged: (value) => fetchData(),
                       )),
                       DataCell(TextField(
-                        controller: fechaPagoFilterController,
-                        decoration:
-                            const InputDecoration(hintText: 'Fecha Pago'),
-                        onChanged: (value) => fetchData(),
-                      )),
-                      DataCell(TextField(
                         controller: ingresoFilterController,
                         decoration: const InputDecoration(hintText: 'Ingreso'),
                         onChanged: (value) => fetchData(),
@@ -296,152 +285,108 @@ class P348AccountPage {
                 ),
                 const Text('Contenidos', style: TextStyle(fontSize: 20)),
                 DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Fecha')),
-                    DataColumn(label: Text('Fecha Compra')),
-                    DataColumn(label: Text('Cuenta')),
-                    DataColumn(label: Text('Cliente/Proveedor')),
-                    DataColumn(label: Text('Número Factura')),
-                    DataColumn(label: Text('Número CI')),
-                    DataColumn(label: Text('Descripción')),
-                    DataColumn(label: Text('Fecha Pago')),
-                    DataColumn(label: Text('Ingreso')),
-                    DataColumn(label: Text('Egreso')),
-                    DataColumn(label: Text('Saldo')),
-                    DataColumn(label: Text('Total')),
-                    DataColumn(label: Text('Retención')),
+                  sortColumnIndex: _sortColumnIndex,
+                  sortAscending: _isAscending,
+                  columns: [
+                    DataColumn(
+                      label: const Text('Fecha'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.fecha, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Fecha Compra'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.fechaCompra, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Cuenta'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.cuentaInterna, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Cliente/Proveedor'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.clienteProveedor, columnIndex,
+                            ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Número Factura'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.numeroFactura, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Número CI'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.numeroCI, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Descripción'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.descripcion, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Ingreso'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.ingreso, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Egreso'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.egreso, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Saldo'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.saldo, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Total'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.total, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Retención'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.retencion, columnIndex, ascending);
+                      },
+                    ),
                   ],
                   rows: movimientos.map((movimiento) {
                     return DataRow(cells: [
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.fecha != null
-                              ? DateFormat('yyyy-MM-dd')
-                                  .format(movimiento.fecha!)
-                              : '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.fecha =
-                              DateFormat('yyyy-MM-dd').parse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.fechaCompra != null
-                              ? DateFormat('yyyy-MM-dd')
-                                  .format(movimiento.fechaCompra!)
-                              : '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.fechaCompra =
-                              DateFormat('yyyy-MM-dd').parse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.cuentaInterna ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.cuentaInterna = value;
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.clienteProveedor ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.clienteProveedor = value;
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.numeroFactura ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.numeroFactura = value;
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.numeroCI ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.numeroCI = value;
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.descripcion ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.descripcion = value;
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.fechaPago != null
-                              ? DateFormat('yyyy-MM-dd')
-                                  .format(movimiento.fechaPago!)
-                              : '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.fechaPago =
-                              DateFormat('yyyy-MM-dd').parse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.ingreso?.toString() ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.ingreso = double.tryParse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.egreso?.toString() ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.egreso = double.tryParse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.saldo?.toString() ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.saldo = double.tryParse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.total?.toString() ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.total = double.tryParse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
-                          text: movimiento.retencion?.toString() ?? '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.retencion = double.tryParse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
+                      DataCell(Text(movimiento.fecha != null
+                          ? DateFormat('yyyy-MM-dd').format(movimiento.fecha!)
+                          : '')),
+                      DataCell(Text(movimiento.fechaCompra != null
+                          ? DateFormat('yyyy-MM-dd')
+                              .format(movimiento.fechaCompra!)
+                          : '')),
+                      DataCell(Text(movimiento.cuentaInterna ?? '')),
+                      DataCell(Text(movimiento.clienteProveedor ?? '')),
+                      DataCell(Text(movimiento.numeroFactura ?? '')),
+                      DataCell(Text(movimiento.numeroCI ?? '')),
+                      DataCell(Text(movimiento.descripcion ?? '')),
+                      DataCell(Text(movimiento.ingreso?.toString() ?? '')),
+                      DataCell(Text(movimiento.egreso?.toString() ?? '')),
+                      DataCell(Text(movimiento.saldo?.toString() ?? '')),
+                      DataCell(Text(movimiento.total?.toString() ?? '')),
+                      DataCell(Text(movimiento.retencion?.toString() ?? '')),
                     ]);
                   }).toList(),
                 ),
@@ -451,5 +396,19 @@ class P348AccountPage {
         ],
       ),
     );
+  }
+
+  // Método para ordenar los datos
+  void _sortData<T>(Comparable<T>? Function(MovimientoContable mov) getField,
+      int columnIndex, bool ascending) {
+    movimientos.sort((a, b) {
+      final aValue = getField(a);
+      final bValue = getField(b);
+      return ascending
+          ? Comparable.compare(aValue as Comparable, bValue as Comparable)
+          : Comparable.compare(bValue as Comparable, aValue as Comparable);
+    });
+    _sortColumnIndex = columnIndex;
+    _isAscending = ascending;
   }
 }

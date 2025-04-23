@@ -26,8 +26,6 @@ class Bank1Page {
       TextEditingController();
   final TextEditingController descripcionFilterController =
       TextEditingController();
-  final TextEditingController fechaPagoFilterController =
-      TextEditingController();
   final TextEditingController ingresoFilterController = TextEditingController();
   final TextEditingController egresoFilterController = TextEditingController();
   final TextEditingController saldoFilterController = TextEditingController();
@@ -38,6 +36,10 @@ class Bank1Page {
   final TextEditingController cuentaInternaController = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
+
+  // Variables para el estado de ordenamiento
+  int? _sortColumnIndex;
+  bool _isAscending = true;
 
   void fetchData() async {
     isLoading.value = true;
@@ -83,12 +85,6 @@ class Bank1Page {
         matches &= movimiento.descripcion
                 ?.contains(descripcionFilterController.text) ??
             false;
-      }
-      if (fechaPagoFilterController.text.isNotEmpty) {
-        matches &= movimiento.fechaPago != null &&
-            DateFormat('yyyy-MM-dd')
-                .format(movimiento.fechaPago!)
-                .contains(fechaPagoFilterController.text);
       }
       if (ingresoFilterController.text.isNotEmpty) {
         matches &= movimiento.ingreso
@@ -205,7 +201,6 @@ class Bank1Page {
                     DataColumn(label: Text('Número Factura')),
                     DataColumn(label: Text('Número CI')),
                     DataColumn(label: Text('Descripción')),
-                    DataColumn(label: Text('Fecha Pago')),
                     DataColumn(label: Text('Ingreso')),
                     DataColumn(label: Text('Egreso')),
                     DataColumn(label: Text('Saldo')),
@@ -256,12 +251,6 @@ class Bank1Page {
                         onChanged: (value) => fetchData(),
                       )),
                       DataCell(TextField(
-                        controller: fechaPagoFilterController,
-                        decoration:
-                            const InputDecoration(hintText: 'Fecha Pago'),
-                        onChanged: (value) => fetchData(),
-                      )),
-                      DataCell(TextField(
                         controller: ingresoFilterController,
                         decoration: const InputDecoration(hintText: 'Ingreso'),
                         onChanged: (value) => fetchData(),
@@ -295,20 +284,88 @@ class Bank1Page {
                 ),
                 const Text('Contenidos', style: TextStyle(fontSize: 20)),
                 DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Fecha')),
-                    DataColumn(label: Text('Fecha Compra')),
-                    DataColumn(label: Text('Cuenta')),
-                    DataColumn(label: Text('Cliente/Proveedor')),
-                    DataColumn(label: Text('Número Factura')),
-                    DataColumn(label: Text('Número CI')),
-                    DataColumn(label: Text('Descripción')),
-                    DataColumn(label: Text('Fecha Pago')),
-                    DataColumn(label: Text('Ingreso')),
-                    DataColumn(label: Text('Egreso')),
-                    DataColumn(label: Text('Saldo')),
-                    DataColumn(label: Text('Total')),
-                    DataColumn(label: Text('Retención')),
+                  sortColumnIndex: _sortColumnIndex,
+                  sortAscending: _isAscending,
+                  columns: [
+                    DataColumn(
+                      label: const Text('Fecha'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.fecha, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Fecha Compra'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.fechaCompra, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Cuenta'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.cuentaInterna, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Cliente/Proveedor'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.clienteProveedor, columnIndex,
+                            ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Número Factura'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.numeroFactura, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Número CI'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.numeroCI, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Descripción'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.descripcion, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Ingreso'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.ingreso, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Egreso'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.egreso, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Saldo'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.saldo, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Total'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData((mov) => mov.total, columnIndex, ascending);
+                      },
+                    ),
+                    DataColumn(
+                      label: const Text('Retención'),
+                      onSort: (columnIndex, ascending) {
+                        _sortData(
+                            (mov) => mov.retencion, columnIndex, ascending);
+                      },
+                    ),
                   ],
                   rows: movimientos.map((movimiento) {
                     return DataRow(cells: [
@@ -385,19 +442,6 @@ class Bank1Page {
                       )),
                       DataCell(TextField(
                         controller: TextEditingController(
-                          text: movimiento.fechaPago != null
-                              ? DateFormat('yyyy-MM-dd')
-                                  .format(movimiento.fechaPago!)
-                              : '',
-                        ),
-                        onSubmitted: (value) {
-                          movimiento.fechaPago =
-                              DateFormat('yyyy-MM-dd').parse(value);
-                          updateMovimiento(movimiento);
-                        },
-                      )),
-                      DataCell(TextField(
-                        controller: TextEditingController(
                           text: movimiento.ingreso?.toString() ?? '',
                         ),
                         onSubmitted: (value) {
@@ -450,5 +494,19 @@ class Bank1Page {
         ],
       ),
     );
+  }
+
+  // Método para ordenar los datos
+  void _sortData<T>(Comparable<T>? Function(MovimientoContable mov) getField,
+      int columnIndex, bool ascending) {
+    movimientos.sort((a, b) {
+      final aValue = getField(a);
+      final bValue = getField(b);
+      return ascending
+          ? Comparable.compare(aValue as Comparable, bValue as Comparable)
+          : Comparable.compare(bValue as Comparable, aValue as Comparable);
+    });
+    _sortColumnIndex = columnIndex;
+    _isAscending = ascending;
   }
 }

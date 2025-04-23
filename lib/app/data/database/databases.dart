@@ -54,6 +54,7 @@ class Databases extends GetxController {
       'account_moves',
       where: 'cuenta = ?',
       whereArgs: [cuenta],
+      orderBy: 'fecha DESC', // Orden ascendente por fecha
     );
     if (maps.isNotEmpty) {
       return maps.map((map) => MovimientoContable.fromJson(map)).toList();
@@ -66,6 +67,7 @@ class Databases extends GetxController {
       'account_moves',
       where: 'cuentaInterna = ?',
       whereArgs: [cuenta],
+      orderBy: 'fecha DESC', // Orden ascendente por fecha
     );
     if (maps.isNotEmpty) {
       return maps.map((map) => MovimientoContable.fromJson(map)).toList();
@@ -74,7 +76,10 @@ class Databases extends GetxController {
   }
 
   Future<List<MovimientoContable>> getAllMoves() async {
-    List<Map<String, dynamic>> maps = await database.query('account_moves');
+    List<Map<String, dynamic>> maps = await database.query(
+      'account_moves',
+      orderBy: 'fecha DESC', // Orden ascendente por fecha
+    );
     return List.generate(maps.length, (i) {
       return MovimientoContable.fromJson(maps[i]);
     });
@@ -94,6 +99,7 @@ class Databases extends GetxController {
       'account_moves',
       columns: ['clienteProveedor'],
       distinct: true,
+      orderBy: 'fecha DESC', // Orden ascendente por fecha
     );
 
     return List.generate(maps.length, (i) {

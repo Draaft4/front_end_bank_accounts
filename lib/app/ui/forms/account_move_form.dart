@@ -210,8 +210,7 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                 Expanded(
                   child: _buildTextField(
                     labelText: 'Número Factura *',
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    keyboardType: TextInputType.text,
                     onChanged: (value) =>
                         controller.numeroFactura.value = value,
                   ),
@@ -233,14 +232,14 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                     onChanged: (value) => controller.numeroCI.value = value,
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Obx(() => _buildListTile(
-                        title: "Fecha Pago",
-                        date: controller.selectedFechaPago.value,
-                        onTap: () => controller.pickFechaPago(context),
-                      )),
-                ),
+                // const SizedBox(width: 10),
+                // Expanded(
+                //   child: Obx(() => _buildListTile(
+                //         title: "Fecha Pago",
+                //         date: controller.selectedFechaPago.value,
+                //         onTap: () => controller.pickFechaPago(context),
+                //       )),
+                // ),
               ],
             ),
             Row(

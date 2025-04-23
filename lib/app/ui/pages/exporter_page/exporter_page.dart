@@ -2,6 +2,7 @@ import 'package:banck_accounts_cards/app/controllers/exporter_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart'; // Import necesario para formatear fechas
 
 class ExporterPage extends GetView<ExporterController> {
   @override
@@ -11,13 +12,14 @@ class ExporterPage extends GetView<ExporterController> {
     if (accountOrigin != null) {
       controller.setSelectedItem(accountOrigin);
     }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exportar a Excel...'),
       ),
       body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Obx(() {
               return DropdownButton<String>(
@@ -35,6 +37,47 @@ class ExporterPage extends GetView<ExporterController> {
                 }).toList(),
               );
             }),
+            const SizedBox(height: 20),
+            Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (pickedDate != null) {
+                        controller.setStartDate(pickedDate);
+                      }
+                    },
+                    child: Text(controller.startDate.value != null
+                        ? 'Desde: ${DateFormat('yyyy-MM-dd').format(controller.startDate.value!)}'
+                        : 'Seleccionar Fecha Inicial'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (pickedDate != null) {
+                        controller.setEndDate(pickedDate);
+                      }
+                    },
+                    child: Text(controller.endDate.value != null
+                        ? 'Hasta: ${DateFormat('yyyy-MM-dd').format(controller.endDate.value!)}'
+                        : 'Seleccionar Fecha Final'),
+                  ),
+                ],
+              );
+            }),
+            const SizedBox(height: 20),
             CupertinoButton(
               onPressed: () {
                 controller.exportToExcel();
