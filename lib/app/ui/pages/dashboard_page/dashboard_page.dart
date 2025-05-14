@@ -32,25 +32,40 @@ class DashboardPage {
 
   void fetchData() async {
     isLoading.value = true;
+
     // Fetch data from the API and update the balances bank accounts
-    balanceDiners.value = await apiService.getBalance('Diners');
-    balanceJ406.value = await apiService.getBalance('J406');
-    balanceC092.value = await apiService.getBalance('C092');
-    balanceAp221.value = await apiService.getBalance('AP221');
-    balanceE210.value = await apiService.getBalance('E210');
-    balanceP348.value = await apiService.getBalance('P348');
-    balanceCash.value = await apiService.getBalance('Efectivo');
-    balanceBank1.value = await apiService.getBalance('Banco 1');
-    balanceBank2.value = await apiService.getBalance('Banco 2');
+    balanceDiners.value = await apiService.getBalance('Diners') -
+        await apiService.getRetention('Diners');
+    balanceJ406.value = await apiService.getBalance('J406') -
+        await apiService.getRetention('J406');
+    balanceC092.value = await apiService.getBalance('C092') -
+        await apiService.getRetention('C092');
+    balanceAp221.value = await apiService.getBalance('AP221') -
+        await apiService.getRetention('AP221');
+    balanceE210.value = await apiService.getBalance('E210') -
+        await apiService.getRetention('E210');
+    balanceP348.value = await apiService.getBalance('P348') -
+        await apiService.getRetention('P348');
+    balanceCash.value = await apiService.getBalance('Efectivo') -
+        await apiService.getRetention('Efectivo');
+    balanceBank1.value = await apiService.getBalance('Banco 1') -
+        await apiService.getRetention('Banco 1');
+    balanceBank2.value = await apiService.getBalance('Banco 2') -
+        await apiService.getRetention('Banco 2');
 
     balanceLisboaBuilding.value =
-        await apiService.getBalance('Alicuotas Edificio Lisboa');
-    balancePaulMonsalve.value =
-        await apiService.getBalance('Contabilidad Personal Paul Monsalve');
+        await apiService.getBalance('Alicuotas Edificio Lisboa') -
+            await apiService.getRetention('Alicuotas Edificio Lisboa');
+    balancePaulMonsalve.value = await apiService
+            .getBalance('Contabilidad Personal Paul Monsalve') -
+        await apiService.getRetention('Contabilidad Personal Paul Monsalve');
     balanceMonsalveMoscoso.value =
-        await apiService.getBalance('Hermanos Monsalve Moscoso');
+        await apiService.getBalance('Hermanos Monsalve Moscoso') -
+            await apiService.getRetention('Hermanos Monsalve Moscoso');
     balanceFamilyLeases.value =
-        await apiService.getBalance('Arriendos Familia');
+        await apiService.getBalance('Arriendos Familia') -
+            await apiService.getRetention('Arriendos Familia');
+
     // Calculate the total balance
     totalBalance.value = balanceAp221.value +
         balanceE210.value +
@@ -65,6 +80,7 @@ class DashboardPage {
         balancePaulMonsalve.value +
         balanceMonsalveMoscoso.value +
         balanceFamilyLeases.value;
+
     isLoading.value = false;
   }
 

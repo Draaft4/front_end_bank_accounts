@@ -22,6 +22,18 @@ class ApiServiceAccounting extends BaseApiService {
   Future<void> updateAccountMove(MovimientoContable accountMove) async {
     await databases.updateMove(accountMove);
   }
+
+  Future<double> getRetention(String cuenta) async {
+    final List<MovimientoContable> movimientos =
+        await databases.getMoves(cuenta);
+
+    double totalRetencion = 0;
+    for (var movimiento in movimientos) {
+      totalRetencion += movimiento.retencion ?? 0;
+    }
+
+    return totalRetencion;
+  }
 }
 
 class ApiServiceOnAccount extends BaseApiService {
