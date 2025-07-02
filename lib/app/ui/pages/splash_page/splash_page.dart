@@ -16,7 +16,14 @@ class SplashPage extends GetView<SplashController> {
               height: controller.isAnimating.value ? 500 : 100,
               duration: const Duration(seconds: 2),
               curve: Curves.easeInOut,
-              child: Image.asset('static/logo.png'),
+              //child: Image.asset('static/logo.png'),
+              child: Text(
+                'Contabilidad',
+                style: TextStyle(
+                  fontSize: controller.isAnimating.value ? 32 : 16,
+                  color: Colors.blue,
+                ),
+              ),
             );
           }),
         ),

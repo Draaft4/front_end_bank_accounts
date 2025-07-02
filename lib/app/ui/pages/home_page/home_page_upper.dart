@@ -203,7 +203,7 @@ class HomePageUpper {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          logoImg(),
+          //logoImg(),
           const Divider(),
           const Divider(),
           optionsButton("Principal", Icons.dashboard),
