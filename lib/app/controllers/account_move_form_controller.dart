@@ -20,6 +20,7 @@ class AccountMoveFormController extends GetxController {
   var retencion = 0.0.obs;
   var mesAno = ''.obs;
   var cuentaIntera = ''.obs;
+  var cuentaBancariaPersonal = ''.obs;
 
   TextEditingController cuentaController = TextEditingController();
   ApiServiceAccounting apiService = Get.find<ApiServiceAccounting>();
@@ -98,6 +99,7 @@ class AccountMoveFormController extends GetxController {
       total: total.value,
       retencion: retencion.value,
       cuentaInterna: cuentaIntera.value,
+      cuentaBancariaPersonal: cuentaBancariaPersonal.value,
     );
     apiService.createAccountMove(movimiento);
     Get.back();

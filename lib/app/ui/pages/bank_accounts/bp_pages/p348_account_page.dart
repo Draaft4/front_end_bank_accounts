@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 class P348AccountPage {
   final ApiServiceOnAccount apiService = Get.find<ApiServiceOnAccount>();
   RxList<MovimientoContable> movimientos = <MovimientoContable>[].obs;
+  RxList<MovimientoContable> movimientosPersonales = <MovimientoContable>[].obs;
   RxBool isLoading = false.obs;
 
   final TextEditingController idFilterController = TextEditingController();
@@ -45,7 +46,16 @@ class P348AccountPage {
     isLoading.value = true;
     List<MovimientoContable> allMovimientos =
         (await apiService.fetchData("P348")).cast<MovimientoContable>();
-    movimientos.value = allMovimientos.where((movimiento) {
+    List<MovimientoContable> allMovimientosPersonales =
+        (await apiService.fetchPersonalAccounts("P348"))
+            .cast<MovimientoContable>();
+
+    List<MovimientoContable> todosLosMovimientos = [
+      ...allMovimientos,
+      ...allMovimientosPersonales
+    ];
+
+    movimientos.value = todosLosMovimientos.where((movimiento) {
       bool matches = true;
       if (idFilterController.text.isNotEmpty) {
         matches &= movimiento.id.toString().contains(idFilterController.text);

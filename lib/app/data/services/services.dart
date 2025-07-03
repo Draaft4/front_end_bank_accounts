@@ -41,6 +41,10 @@ class ApiServiceOnAccount extends BaseApiService {
     return databases.getMoves(account);
   }
 
+  Future<List> fetchPersonalAccounts(String account) async {
+    return databases.getPersonalAccounts(account);
+  }
+
   Future<List> fetchDataInternal(String account) async {
     return databases.getInternalAccount(account);
   }

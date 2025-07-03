@@ -30,6 +30,7 @@ class Databases extends GetxController {
       cuentaInterna TEXT,
       cuenta TEXT,
       clienteProveedor TEXT,
+      cuentaBancariaPersonal TEXT,
       numeroFactura TEXT,
       numeroCI TEXT,
       descripcion TEXT,
@@ -75,10 +76,23 @@ class Databases extends GetxController {
     return [];
   }
 
+  Future<List<MovimientoContable>> getPersonalAccounts(String cuenta) async {
+    List<Map<String, dynamic>> maps = await database.query(
+      'account_moves',
+      where: 'cuentaBancariaPersonal = ?',
+      whereArgs: [cuenta],
+      orderBy: 'fecha DESC', // Orden ascendente por fecha
+    );
+    if (maps.isNotEmpty) {
+      return maps.map((map) => MovimientoContable.fromJson(map)).toList();
+    }
+    return [];
+  }
+
   Future<List<MovimientoContable>> getAllMoves() async {
     List<Map<String, dynamic>> maps = await database.query(
       'account_moves',
-      orderBy: 'fecha DESC', // Orden ascendente por fecha
+      orderBy: 'fecha DESC',
     );
     return List.generate(maps.length, (i) {
       return MovimientoContable.fromJson(maps[i]);
@@ -99,7 +113,7 @@ class Databases extends GetxController {
       'account_moves',
       columns: ['clienteProveedor'],
       distinct: true,
-      orderBy: 'fecha DESC', // Orden ascendente por fecha
+      orderBy: 'fecha DESC',
     );
 
     return List.generate(maps.length, (i) {
@@ -122,7 +136,6 @@ class Databases extends GetxController {
     for (var movimiento in movimientos) {
       saldoTotal += (movimiento.ingreso! - movimiento.egreso!);
     }
-
     return saldoTotal;
   }
 }

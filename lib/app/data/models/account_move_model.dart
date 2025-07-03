@@ -17,6 +17,7 @@ class MovimientoContable {
   double? total;
   double? retencion;
   String? cuentaInterna;
+  String? cuentaBancariaPersonal;
 
   MovimientoContable({
     this.id,
@@ -35,6 +36,7 @@ class MovimientoContable {
     this.total,
     this.retencion,
     this.cuentaInterna,
+    this.cuentaBancariaPersonal,
   });
 
   factory MovimientoContable.fromJson(Map<String, dynamic> json) {
@@ -58,6 +60,7 @@ class MovimientoContable {
       total: json['total']?.toDouble(),
       retencion: json['retencion']?.toDouble(),
       cuentaInterna: json['cuentaInterna'],
+      cuentaBancariaPersonal: json['cuentaBancariaPersonal'],
     );
   }
 
@@ -81,6 +84,7 @@ class MovimientoContable {
       'total': total,
       'retencion': retencion,
       'cuentaInterna': cuentaInterna,
+      'cuentaBancariaPersonal': cuentaBancariaPersonal,
     };
   }
 }

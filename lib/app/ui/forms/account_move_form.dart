@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 class AccountMoveForm extends GetView<AccountMoveFormController> {
   final NavigationController navController = Get.put(NavigationController());
   final Databases database = Get.find<Databases>();
+  final Rx<String?> selectedCuentaBancariaPersonal = Rx<String?>(null);
+  RxList<String> cuentasPersonalesBanco = ['Efectivo', 'P348'].obs;
   RxList<String> cuentas = [
     'Efectivo',
     'AP221',
@@ -125,6 +127,30 @@ class AccountMoveForm extends GetView<AccountMoveFormController> {
                         );
                       }).toList(),
                     );
+                  }),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Obx(() {
+                    return isPersonalAccount.value
+                        ? DropdownButton<String>(
+                            isExpanded: true,
+                            hint: const Text(
+                                'Seleccione Cuenta Bancaria Personal'),
+                            value: selectedCuentaBancariaPersonal.value,
+                            onChanged: (newValue) {
+                              selectedCuentaBancariaPersonal.value = newValue;
+                              controller.cuentaBancariaPersonal.value =
+                                  newValue!;
+                            },
+                            items: cuentasPersonalesBanco.map((cuenta) {
+                              return DropdownMenuItem<String>(
+                                value: cuenta,
+                                child: Text(cuenta),
+                              );
+                            }).toList(),
+                          )
+                        : Container();
                   }),
                 ),
               ],
